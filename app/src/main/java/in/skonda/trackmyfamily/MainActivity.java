@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
         ImageView iv=(ImageView)findViewById(R.id.iv);
         iv.setImageBitmap((Bitmap) data.getParcelableExtra("data"));
     }
