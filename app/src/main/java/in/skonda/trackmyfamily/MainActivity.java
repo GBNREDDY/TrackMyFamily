@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(i,1);
-                Toast.makeText(MainActivity.this, et1.getText().toString()+" "+et2.getText().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, et1.getText().toString()+et2.getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
