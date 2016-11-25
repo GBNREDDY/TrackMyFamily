@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         tv4.setTypeface(myFont);
 
 
-        //btn=(Button)findViewById(R.id.btn);
+        btn=(Button)findViewById(R.id.btn);
         tv1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
