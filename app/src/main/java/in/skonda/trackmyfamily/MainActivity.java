@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -34,8 +35,15 @@ public class MainActivity extends AppCompatActivity {
         tv3.setTypeface(myFont);
         tv4.setTypeface(myFont);
 
+        final String deviceid=Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
         btn=(Button)findViewById(R.id.btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),deviceid.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
         tv1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
