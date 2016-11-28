@@ -2,12 +2,14 @@ package in.skonda.trackmyfamily;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(),deviceid.toString()+"\n"+imgstr, Toast.LENGTH_SHORT).show();
+                Log.d("imgstr",imgstr);
             }
         });
         tv1.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         bmp.compress(Bitmap.CompressFormat.PNG, 10 , baos);
         byte[] img = baos.toByteArray();
         imgstr= Base64.encodeToString(img,Base64.URL_SAFE);
-        iv.setImageBitmap(bmp);
+        byte[] barray=Base64.decode(imgstr,Base64.URL_SAFE);
+        Bitmap bmp2= BitmapFactory.decodeByteArray(barray,0,barray.length);
+        iv.setImageBitmap(bmp2);
     }
 }
