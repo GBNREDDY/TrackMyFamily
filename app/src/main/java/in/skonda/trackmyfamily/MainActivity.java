@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, et1.getText().toString()+et2.getText().toString(), Toast.LENGTH_SHORT).show();
                /* Intent intent = new Intent();
                 intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
+             //   intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);*/
             }
         });
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView iv=(ImageView)findViewById(R.id.iv);
         Bitmap bmp=(Bitmap) data.getParcelableExtra("data");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 10 , baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 10 , baos);
         byte[] img = baos.toByteArray();
         imgstr= Base64.encodeToString(img,Base64.URL_SAFE);
         byte[] barray=Base64.decode(imgstr,Base64.URL_SAFE);
