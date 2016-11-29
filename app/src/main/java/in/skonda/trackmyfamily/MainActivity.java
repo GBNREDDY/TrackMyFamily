@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -17,13 +18,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
     TextView tv1,tv2,tv3,tv4;
     EditText et1,et2;
     Button btn;
-    String imgstr;
+    String imgstr,user,mobile,deviceid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,14 +48,17 @@ public class MainActivity extends AppCompatActivity {
         tv3.setTypeface(myFont);
         tv4.setTypeface(myFont);
 
-        final String deviceid=Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        deviceid=Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
         btn=(Button)findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),deviceid.toString()+"\n"+imgstr, Toast.LENGTH_SHORT).show();
+                user=et1.getText().toString();
+                mobile=et2.getText().toString();
                 Log.d("imgstr",imgstr);
+                Insert insert=new Insert();
+                insert.execute();
             }
         });
         tv1.setOnClickListener(new View.OnClickListener() {
@@ -56,11 +66,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(i,1);
-                Toast.makeText(MainActivity.this, et1.getText().toString()+et2.getText().toString(), Toast.LENGTH_SHORT).show();
-               /* Intent intent = new Intent();
-                intent.setType("image/*");
-             //   intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);*/
             }
         });
 
@@ -72,11 +77,35 @@ public class MainActivity extends AppCompatActivity {
         ImageView iv=(ImageView)findViewById(R.id.iv);
         Bitmap bmp=(Bitmap) data.getParcelableExtra("data");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 10 , baos);
+        bmp.compress(Bitmap.CompressFormat.PNG, 10 , baos);
         byte[] img = baos.toByteArray();
         imgstr= Base64.encodeToString(img,Base64.URL_SAFE);
         byte[] barray=Base64.decode(imgstr,Base64.URL_SAFE);
         Bitmap bmp2= BitmapFactory.decodeByteArray(barray,0,barray.length);
         iv.setImageBitmap(bmp2);
+    }
+    public class Insert extends AsyncTask<String,String,String> {
+        String result;
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL url = new URL("http:trackfamily.co.in/insert.php?deviceid="+deviceid+"&username="+user+"&mobile="+mobile);
+                HttpURLConnection connect = (HttpURLConnection) url.openConnection();
+                BufferedReader breader = new BufferedReader(new InputStreamReader(connect.getInputStream()));
+                result = breader.readLine();
+                return result;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        protected  void onPostExecute(String result){
+
+            Toast.makeText(MainActivity.this, "result is :"+ result, Toast.LENGTH_SHORT).show();
+
+        }
+
     }
 }
