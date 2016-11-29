@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             try {
                 URL url = new URL("http:trackfamily.co.in/insert.php?deviceid="+deviceid+"&username="+user+"&mobile="+mobile);
+                Log.d("url",deviceid+" "+user+" "+mobile);
                 HttpURLConnection connect = (HttpURLConnection) url.openConnection();
                 BufferedReader breader = new BufferedReader(new InputStreamReader(connect.getInputStream()));
                 result = breader.readLine();
