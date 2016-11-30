@@ -2,6 +2,7 @@ package in.skonda.trackmyfamily;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         tv4.setTypeface(myFont);
 
         deviceid=Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+
 
         btn=(Button)findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {
