@@ -43,13 +43,15 @@ public class MainActivity extends AppCompatActivity {
     Button btn;
     String imgstr, user, mobile, deviceid, message;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
-    SharedPreferences sharedPreferences=getSharedPreferences("messege body", Context.MODE_PRIVATE);
-    SharedPreferences.Editor editor=sharedPreferences.edit();
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPreferences=getApplicationContext().getSharedPreferences("messege body", Context.MODE_PRIVATE);
+        editor=sharedPreferences.edit();
         tv1 = (TextView) findViewById(R.id.tv1);
         et1 = (EditText) findViewById(R.id.et1);
 
@@ -77,8 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("imgstr", imgstr);
                 Insert insert = new Insert();
                 insert.execute();
-                Intent brintent=new Intent(view.getContext(),Receiver.class);
-                startActivity(brintent);
             }
         });
         tv1.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
             case MY_PERMISSIONS_REQUEST_SEND_SMS: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     SmsManager smsManager = SmsManager.getDefault();
-                    Random randomnumber = new Random();                                                            // generating random number btn 1000 t0 9999
+                    Random randomnumber = new Random();                   // generating random number btn 1000 t0 9999
                     int code = randomnumber.nextInt(9999 - 1000) + 1000;
                     message = "verification code from FamilyFriendsTracker" + code;
                     editor.putString("text message", message);
@@ -156,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("msg",message);
                     smsManager.sendTextMessage(mobile, null, message, null, null);
                     Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
+                    Intent brintent=new Intent(getApplicationContext(),Receiver.class);
+                    startActivity(brintent);
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "SMS faild, please try again.", Toast.LENGTH_LONG).show();

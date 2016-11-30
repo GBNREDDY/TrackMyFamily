@@ -19,13 +19,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <receiver android:name=".SMSBroadcastReceiver">
-                <intent-filter>
-                    <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-                </intent-filter>
-            </receiver>
+
         </activity>
-        <activity android:name=".Receiver"></activity>
+
     </application>
 
 </manifest>
