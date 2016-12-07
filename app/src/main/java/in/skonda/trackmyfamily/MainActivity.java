@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -24,104 +23,97 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Random;
-
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-
-import static android.R.attr.bitmap;
 
 public class MainActivity extends AppCompatActivity {
     TextView tv1, tv2, tv3, tv4;
     EditText et1, et2;
     Button btn;
-    String user, mobile, deviceid, message;
+
+    public String user, mobile, deviceid, message;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
     private int PICK_IMAGE_REQUEST = 1;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     File f;
     Bitmap bitmap;
+    Boolean  isRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        sharedPreferences=getApplicationContext().getSharedPreferences("messege body", Context.MODE_PRIVATE);
-        editor=sharedPreferences.edit();
-        tv1 = (TextView) findViewById(R.id.tv1);
-        et1 = (EditText) findViewById(R.id.et1);
+        sharedPreferences = getSharedPreferences("in.skonda.trackmyfamily.registration", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        isRegistered  = sharedPreferences.getBoolean("registered",false);
+        if(isRegistered){
+            Intent map = new Intent(this,MapsActivity.class);
+            startActivity(map);
 
-        tv2 = (TextView) findViewById(R.id.tv2);
-        et2 = (EditText) findViewById(R.id.et2);
+        }else {
+            setContentView(R.layout.activity_main);
 
-        tv3 = (TextView) findViewById(R.id.tv3);
-        tv4 = (TextView) findViewById(R.id.tv4);
-        Typeface myFont = Typeface.createFromAsset(getAssets(), "fonts/fontawesome-webfont.ttf");
-        tv1.setTypeface(myFont);
-        tv3.setTypeface(myFont);
-        tv4.setTypeface(myFont);
+            tv1 = (TextView) findViewById(R.id.tv1);
+            et1 = (EditText) findViewById(R.id.et1);
 
-        deviceid = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        editor.putString("device_id",deviceid);
-        editor.commit();
+            tv2 = (TextView) findViewById(R.id.tv2);
+            et2 = (EditText) findViewById(R.id.et2);
 
-        btn = (Button) findViewById(R.id.btn);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                user = et1.getText().toString();
-                mobile = et2.getText().toString();
-                if (TextUtils.isEmpty(user) ||TextUtils.isEmpty(mobile) ) {
-                    if (TextUtils.isEmpty(user)) {
-                        et1.setError("Should not be empty");
+            tv3 = (TextView) findViewById(R.id.tv3);
+            tv4 = (TextView) findViewById(R.id.tv4);
+            Typeface myFont = Typeface.createFromAsset(getAssets(), "fonts/fontawesome-webfont.ttf");
+            tv1.setTypeface(myFont);
+            tv3.setTypeface(myFont);
+            tv4.setTypeface(myFont);
+
+            deviceid = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+            editor.putString("device_id", deviceid);
+            editor.commit();
+
+            btn = (Button) findViewById(R.id.btn);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    user = et1.getText().toString();
+                    mobile = et2.getText().toString();
+                    if (TextUtils.isEmpty(user) || TextUtils.isEmpty(mobile)) {
+                        if (TextUtils.isEmpty(user)) {
+                            et1.setError("Should not be empty");
+                        }
+                        if (TextUtils.isEmpty(mobile)) {
+                            et2.setError("should not be empty");
+                        }
+                        return;
+                    } else {
+                        //Toast.makeText(MainActivity.this, user+"\n"+mobile, Toast.LENGTH_SHORT).show();
+                        editor.putString("name", user);
+                        editor.putString("mobile_number", mobile);
+                        editor.commit();
+                        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)   // sms permission selfcheck
+                        {
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
+                        } else {
+                            sendingSms();
+                        }
+                        if (bitmap != null) {
+                            ImageUpload imageUpload = new ImageUpload(f.getName(), getFilesDir());
+                            imageUpload.execute();
+                        }
                     }
-                    if(TextUtils.isEmpty(mobile)){
-                        et2.setError("should not be empty");
-                    }
-                    return;
                 }
-                else {
-                editor.putString("name",user);
-                editor.putString("mobile_number",mobile);
-                editor.commit();
-                    ImageUpload imageUpload=new ImageUpload(f.getName(),getFilesDir());
-                    imageUpload.execute();
+            });
+            tv1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
                 }
-            }
-        });
-        tv1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-            }
-        });
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
-                sendingSms();
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
-            }
+            });
         }
     }
 
@@ -164,9 +156,10 @@ public class MainActivity extends AppCompatActivity {
         SmsManager smsManager = SmsManager.getDefault();
         Random randomnumber = new Random();                   // generating random number btn 1000 t0 9999
         int code = randomnumber.nextInt(9999 - 1000) + 1000;
-        message = "verification code from FamilyFriendsTracker" + code;
-        editor.putString("text message", message);
+        message = "verification code from FamilyFriendsTracker " + code;
+        editor.putString("text_message", message);
         editor.commit();
+        //Toast.makeText(this, sharedPreferences.getString("text_message",null).toString(), Toast.LENGTH_SHORT).show();
         Log.d("msg",message);
         smsManager.sendTextMessage(mobile, null, message, null, null);
         Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();

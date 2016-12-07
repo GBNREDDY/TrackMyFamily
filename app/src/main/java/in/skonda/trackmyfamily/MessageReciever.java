@@ -11,48 +11,51 @@ import android.widget.Toast;
 
 import java.util.Map;
 
+import static java.lang.Boolean.TRUE;
+
 public class MessageReciever extends BroadcastReceiver {
-    String number, mobile, deviceid,user, message;
+    String  mobile, deviceid, user, message;
+    String number;
     SharedPreferences sharedPreferences;
-    public MessageReciever() {
-        this.deviceid = sharedPreferences.getString("device_id", null);
-        this.user = sharedPreferences.getString("name", null);
-        this.mobile = sharedPreferences.getString("mobile_number", null);
+
+    public MessageReciever(){
+
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
-        //throw new UnsupportedOperationException("Not yet implemented");
-        sharedPreferences = context.getSharedPreferences("in.skonda.trackfamily.registration", Context.MODE_PRIVATE);
-        // Toast.makeText(context, "receiver on", Toast.LENGTH_SHORT).show();
+        sharedPreferences = context.getSharedPreferences("in.skonda.trackmyfamily.registration", Context.MODE_PRIVATE);
+        deviceid=sharedPreferences.getString("device_id","defaut");
+        user=sharedPreferences.getString("name","default");
+        mobile=sharedPreferences.getString("mobile_number","default");
+         //Toast.makeText(context, "receiver on", Toast.LENGTH_SHORT).show();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
             Object[] pdus = (Object[]) bundle.get("pdus");
             final SmsMessage[] messages = new SmsMessage[pdus.length];
-            //  Toast.makeText(context, "reading sms", Toast.LENGTH_SHORT).show();
+              //Toast.makeText(context, "reading sms", Toast.LENGTH_SHORT).show();
             for (int i = 0; i < pdus.length; i++) {
                 messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
-                // Toast.makeText(context, "in for loop", Toast.LENGTH_SHORT).show();
+               //  Toast.makeText(context, "in for loop", Toast.LENGTH_SHORT).show();
                 number = messages[i].getOriginatingAddress();
             }
-            if(mobile.equalsIgnoreCase(number)){
+            if(sharedPreferences.getString("mobile_number","123456789").equalsIgnoreCase(number)){
                 if (messages.length > -1) {
-                    message = sharedPreferences.getString("text message", message);
-                    // Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                    message = sharedPreferences.getString("text_message", message);
+                     //Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                     if (messages[0].getDisplayMessageBody().equals(message)) {
                         Log.d("text", "Message recieved: " + messages[0].getMessageBody());
-                        DataUpload dataUpload = new DataUpload(deviceid, user, mobile);
+                        DataUpload dataUpload=new DataUpload(deviceid, user, mobile);
                         dataUpload.execute();
-                        Intent intent1 = new Intent(context,Map.class);
-                        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent1);
-                    } else
+                        SharedPreferences.Editor editor=sharedPreferences.edit();
+                        editor.putBoolean("registered",TRUE);
+                        editor.commit();
+                        Intent mapIntent = new Intent(context,MapsActivity.class);
+                        mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(mapIntent);
+                    }else {
                         Toast.makeText(context, "verification failed", Toast.LENGTH_SHORT).show();
-                    // TODO: This method is called when the BroadcastReceiver is receiving
-                    // an Intent broadcast.
-                    //throw new UnsupportedOperationException("Not yet implemented");
+                    }
                 }
             }
 

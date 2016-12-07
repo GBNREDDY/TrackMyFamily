@@ -13,7 +13,9 @@ import java.net.URL;
  */
 
 public class DataUpload extends AsyncTask<String, String, String> {
-private final String deviceid,user,mobile;
+    private final String deviceid;
+    private  final  String user;
+    private  final  String mobile;
     String result;
     public DataUpload(String deviceid, String user, String mobile) {
         this.deviceid=deviceid;
@@ -35,5 +37,10 @@ private final String deviceid,user,mobile;
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
     }
 }
