@@ -51,7 +51,7 @@ public class MessageReciever extends BroadcastReceiver {
                         editor.putBoolean("registered",TRUE);
                         editor.commit();
                         Intent mapIntent = new Intent(context,MapsActivity.class);
-                        mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mapIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(mapIntent);
                     }else {
                         Toast.makeText(context, "verification failed", Toast.LENGTH_SHORT).show();

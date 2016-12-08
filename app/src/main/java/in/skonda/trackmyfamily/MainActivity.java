@@ -51,8 +51,9 @@ public class MainActivity extends AppCompatActivity {
         isRegistered  = sharedPreferences.getBoolean("registered",false);
         if(isRegistered){
             Intent map = new Intent(this,MapsActivity.class);
+            map.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(map);
-
+            finish();
         }else {
             setContentView(R.layout.activity_main);
 
