@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
         isRegistered  = sharedPreferences.getBoolean("registered",false);
         if(isRegistered){
-            Intent map = new Intent(this,MapsActivity.class);
+            Intent map = new Intent(this,TabbedActivity.class);
             map.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(map);
             finish();
@@ -102,6 +103,11 @@ public class MainActivity extends AppCompatActivity {
                         if (bitmap != null) {
                             ImageUpload imageUpload = new ImageUpload(f.getName(), getFilesDir());
                             imageUpload.execute();
+                            editor.putString("image",f.getName()+".png");
+                            editor.commit();
+                        }else {
+                            editor.putString("image","default.png");
+                            editor.commit();
                         }
                     }
                 }
@@ -130,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
 
                 f=new File(getFilesDir(),deviceid+".png");
                 f.createNewFile();
-
-
+                ImageView iv=(ImageView) findViewById(R.id.iv);
+                iv.setImageBitmap(bitmap);
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
                 byte[] bitmapdata = bos.toByteArray();

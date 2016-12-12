@@ -9,12 +9,20 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    android:background="@drawable/mybackground"
+    android:gravity="center"
     tools:context="in.skonda.trackmyfamily.MainActivity">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:src="@mipmap/ic_launcher"
+        android:background="@drawable/circle"
+        android:id="@id/iv"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,11 +38,6 @@
         android:id="@id/tv2"
         android:textSize="15sp"
         android:layout_margin="15dp"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:id="@id/iv"/>
     </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
@@ -44,8 +47,10 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:singleLine="true"
             android:id="@id/et1"
-            android:backgroundTint="#fff"
+            android:backgroundTint="@color/colorAccent"
             android:maxLength="20"
             android:paddingStart="30dp"
             android:paddingLeft="30dp"/>
@@ -67,8 +72,10 @@
             android:layout_height="wrap_content"
             android:id="@id/et2"
             android:maxLength="10"
+            android:maxLines="1"
+            android:singleLine="true"
             android:inputType="number"
-            android:backgroundTint="#fff"
+            android:backgroundTint="@color/colorAccent"
             android:paddingStart="30dp"
             android:paddingLeft="30dp"/>
         <TextView
@@ -87,7 +94,10 @@
         android:layout_marginTop="15dp"
         android:text="REGISTER"
         android:textSize="20sp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         android:id="@id/btn"
+
         />
 
 </LinearLayout>

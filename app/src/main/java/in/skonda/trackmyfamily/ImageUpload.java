@@ -43,7 +43,7 @@ public class ImageUpload extends AsyncTask<String, String, String> {
         client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
-                Log.d("skondad ", "Failed to upload:  " + e.getMessage() );
+                Log.d("skondad ", "Failed to upload: image " + e.getMessage() );
             }
             @Override
             public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {

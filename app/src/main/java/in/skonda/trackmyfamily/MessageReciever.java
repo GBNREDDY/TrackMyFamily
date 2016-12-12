@@ -9,12 +9,11 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.Map;
-
 import static java.lang.Boolean.TRUE;
 
 public class MessageReciever extends BroadcastReceiver {
     String  mobile, deviceid, user, message;
+    String image;
     String number;
     SharedPreferences sharedPreferences;
 
@@ -28,6 +27,7 @@ public class MessageReciever extends BroadcastReceiver {
         deviceid=sharedPreferences.getString("device_id","defaut");
         user=sharedPreferences.getString("name","default");
         mobile=sharedPreferences.getString("mobile_number","default");
+        image=sharedPreferences.getString("image","default");
          //Toast.makeText(context, "receiver on", Toast.LENGTH_SHORT).show();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
@@ -45,20 +45,20 @@ public class MessageReciever extends BroadcastReceiver {
                      //Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                     if (messages[0].getDisplayMessageBody().equals(message)) {
                         Log.d("text", "Message recieved: " + messages[0].getMessageBody());
-                        DataUpload dataUpload=new DataUpload(deviceid, user, mobile);
+                        DataUpload dataUpload=new DataUpload(deviceid, user, mobile, image);
                         dataUpload.execute();
                         SharedPreferences.Editor editor=sharedPreferences.edit();
                         editor.putBoolean("registered",TRUE);
                         editor.commit();
-                        Intent mapIntent = new Intent(context,MapsActivity.class);
-                        mapIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Intent mapIntent = new Intent(context,TabbedActivity.class);
+                        mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(mapIntent);
-                    }else {
-                        Toast.makeText(context, "verification failed", Toast.LENGTH_SHORT).show();
+
                     }
                 }
+            }else {
+                Toast.makeText(context, "verification failed", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 }
