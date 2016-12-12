@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -27,18 +25,33 @@ public class TabbedActivity extends AppCompatActivity implements ActionBar.TabLi
 
         viewPager=(ViewPager)findViewById(R.id.activity_tabbed);
         viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                actionBar.setSelectedNavigationItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         actionBar=getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         ActionBar.Tab tab1=actionBar.newTab();
         tab1.setText("Map Tab");
-        tab1.setTabListener(this);
+        tab1.setTabListener(TabbedActivity.this);
 
         ActionBar.Tab tab2=actionBar.newTab();
         tab2.setText("List Tab");
-        tab2.setTabListener(this);
+        tab2.setTabListener(TabbedActivity.this);
 
 
         actionBar.addTab(tab1);
@@ -46,10 +59,14 @@ public class TabbedActivity extends AppCompatActivity implements ActionBar.TabLi
 
 
     }
-
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng sydney = new LatLng(-34, 151);
+        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
     @Override
     public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
-
+    viewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override
