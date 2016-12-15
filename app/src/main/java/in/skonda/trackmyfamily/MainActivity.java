@@ -30,12 +30,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
+import static java.lang.Boolean.TRUE;
+
 public class MainActivity extends AppCompatActivity {
     TextView tv1, tv2, tv3, tv4;
     EditText et1, et2;
     Button btn;
 
-    public String user, mobile, deviceid, message;
+    public String user, mobile, deviceid, message, image;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
     private int PICK_IMAGE_REQUEST = 1;
     SharedPreferences sharedPreferences;
@@ -50,6 +52,11 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("in.skonda.trackmyfamily.registration", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         isRegistered  = sharedPreferences.getBoolean("registered",false);
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)   // sms permission selfcheck
+        {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_SEND_SMS);
+        }
         if(isRegistered){
             Intent map = new Intent(this,TabbedActivity.class);
             map.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -136,8 +143,8 @@ public class MainActivity extends AppCompatActivity {
 
                 f=new File(getFilesDir(),deviceid+".png");
                 f.createNewFile();
-                ImageView iv=(ImageView) findViewById(R.id.iv);
-                iv.setImageBitmap(bitmap);
+                //ImageView iv=(ImageView) findViewById(R.id.iv);
+                //iv.setImageBitmap(bitmap);
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
                 byte[] bitmapdata = bos.toByteArray();

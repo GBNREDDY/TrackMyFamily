@@ -78,26 +78,27 @@ public class TabbedActivity extends AppCompatActivity implements ActionBar.TabLi
     public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
 
     }
-}
-class MyAdapter extends FragmentPagerAdapter {
-    public MyAdapter(FragmentManager fm) {
-        super(fm);
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-
-        Fragment fragment=null;
-        if (position==0){
-            fragment=new Mapf();
-        }else if (position==1){
-            fragment=new Listf();
+    public class MyAdapter extends FragmentPagerAdapter {
+        public MyAdapter(FragmentManager fm) {
+            super(fm);
         }
-        return fragment;
+
+        @Override
+        public Fragment getItem(int position) {
+
+            Fragment fragment=null;
+            if (position==0){
+                fragment=new Mapf();
+            }else if (position==1){
+                fragment=new Listf();
+            }
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
     }
 
-    @Override
-    public int getCount() {
-        return 2;
-    }
 }
