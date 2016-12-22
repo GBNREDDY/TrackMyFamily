@@ -59,11 +59,7 @@ public class TabbedActivity extends AppCompatActivity implements ActionBar.TabLi
 
 
     }
-    public void onMapReady(GoogleMap googleMap) {
-        LatLng sydney = new LatLng(-34, 151);
-        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-    }
+
     @Override
     public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
     viewPager.setCurrentItem(tab.getPosition());
