@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        if(sRegistered){
+        if(isRegistered){
             Intent map = new Intent(this,TabbedActivity.class);
             map.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(map);
