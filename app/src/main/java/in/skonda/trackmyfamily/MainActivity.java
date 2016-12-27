@@ -31,36 +31,34 @@ import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
+    private static final int MY_PERMISSIONS_REQUEST = 0;
+    public String user, mobile, deviceid, message, image;
     TextView tv1, tv2, tv3, tv4;
     EditText et1, et2;
     Button btn;
-
-    public String user, mobile, deviceid, message, image;
-    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
-    private int PICK_IMAGE_REQUEST = 1;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     File f;
     Bitmap bitmap;
-    Boolean  isRegistered;
+    Boolean isRegistered;
+    private int PICK_IMAGE_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPreferences = getSharedPreferences("in.skonda.trackmyfamily.registration", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putBoolean("registered",true);
-        isRegistered  = sharedPreferences.getBoolean("registered",false);
-        if ( ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)   // sms permission selfcheck
+        isRegistered = sharedPreferences.getBoolean("registered", false);
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)   // sms permission selfcheck
         {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST);
         }
-        if(isRegistered){
-            Intent map = new Intent(this,TabbedActivity.class);
+        if (isRegistered) {
+            Intent map = new Intent(this, TabbedActivity.class);
             map.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(map);
             finish();
-        }else {
+        } else {
             setContentView(R.layout.activity_main);
 
             tv1 = (TextView) findViewById(R.id.tv1);
@@ -101,17 +99,17 @@ public class MainActivity extends AppCompatActivity {
                         editor.commit();
                         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)   // sms permission selfcheck
                         {
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST);
                         } else {
                             sendingSms();
                         }
                         if (bitmap != null) {
                             ImageUpload imageUpload = new ImageUpload(f.getName(), getFilesDir());
                             imageUpload.execute();
-                            editor.putString("image",f.getName()+".png");
+                            editor.putString("image", f.getName() + ".png");
                             editor.commit();
-                        }else {
-                            editor.putString("image","default.png");
+                        } else {
+                            editor.putString("image", "default.png");
                             editor.commit();
                         }
                     }
@@ -139,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 //Getting the Bitmap from Gallery
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
 
-                f=new File(getFilesDir(),deviceid+".png");
+                f = new File(getFilesDir(), deviceid + ".png");
                 f.createNewFile();
                 //ImageView iv=(ImageView) findViewById(R.id.iv);
                 //iv.setImageBitmap(bitmap);
@@ -154,9 +152,8 @@ public class MainActivity extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-            finally {
-                TextView tvpic = (TextView)findViewById(R.id.tv2);
+            } finally {
+                TextView tvpic = (TextView) findViewById(R.id.tv2);
                 tvpic.setText(f.getName());
             }
         }
@@ -172,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("text_message", message);
         editor.commit();
         //Toast.makeText(this, sharedPreferences.getString("text_message",null).toString(), Toast.LENGTH_SHORT).show();
-        Log.d("msg",message);
+        Log.d("msg", message);
         smsManager.sendTextMessage(mobile, null, message, null, null);
         Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
     }
@@ -180,15 +177,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_SEND_SMS: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    sendingSms();
-                } else {
-                    Toast.makeText(getApplicationContext(),
-                            "SMS faild, please try again.", Toast.LENGTH_LONG).show();
-                    return;
+            case MY_PERMISSIONS_REQUEST:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    if (grantResults[0] == PackageManager.PERMISSION_DENIED || grantResults[1] == PackageManager.PERMISSION_DENIED){
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST);
+
+                    }
+
+                } else if ( grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED && grantResults[1] == PackageManager.PERMISSION_DENIED) {
+                    //ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST);
+                    finish();
                 }
-            }
+            break;
         }
     }
 }

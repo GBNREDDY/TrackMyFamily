@@ -2,6 +2,7 @@ package in.skonda.trackmyfamily;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -12,7 +13,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,7 +41,9 @@ public class Mapf extends Fragment implements OnMapReadyCallback, LocationListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        View rootView = inflater.inflate(R.layout.fragment_maps, container, false);
+        Button b=(Button) rootView.findViewById(R.id.add_group);
+        b.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome-webfont.ttf"));
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(container.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(container.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -53,7 +56,7 @@ public class Mapf extends Fragment implements OnMapReadyCallback, LocationListen
             //    return TODO;
         }
         locationManager.requestLocationUpdates(GPS_PROVIDER, 5, 5, this);
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        return rootView;
     }
 
     @Override
@@ -87,9 +90,9 @@ public class Mapf extends Fragment implements OnMapReadyCallback, LocationListen
     @Override
     public void onLocationChanged(Location location) {
 
+        LatLng myloc = new LatLng(location.getLatitude(), location.getLongitude());
         mmap.clear();
         mmap.moveCamera(CameraUpdateFactory.zoomIn());
-        LatLng myloc = new LatLng(location.getLatitude(), location.getLongitude());
         mmap.addMarker(new MarkerOptions().position(myloc).title("Marker at My Location with GPS Provider"));
         mmap.moveCamera(CameraUpdateFactory.newLatLng(myloc));
 

@@ -9,8 +9,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
         android:layout_marginBottom="50dp"/>
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="@color/colorAccent">
+    <Button
+        android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"/>
+        android:text="\uf0c0"
+        android:background="@drawable/circle"
+        android:id="@+id/add_group"
+        android:layout_marginRight="2dp"
+        android:layout_marginLeft="2dp" />
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/ll">
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="\uf0c0"
+                    android:background="@drawable/circle"/>
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="\uf0c0"
+                    android:background="@drawable/circle"/>
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="\uf0c0"
+                    android:background="@drawable/circle"/>
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="\uf0c0"
+                    android:background="@drawable/circle"/>
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="\uf0c0"
+                    android:background="@drawable/circle"/>
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="\uf0c0"
+                    android:background="@drawable/circle"/>
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="\uf0c0"
+                    android:background="@drawable/circle"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
 </RelativeLayout>
