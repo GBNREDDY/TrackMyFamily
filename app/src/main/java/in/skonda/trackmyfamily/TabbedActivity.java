@@ -2,9 +2,12 @@ package in.skonda.trackmyfamily;
 
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerTabStrip;
+import android.support.v4.view.PagerTitleStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +36,7 @@ public class TabbedActivity extends AppCompatActivity implements ActionBar.TabLi
 
             @Override
             public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
+
             }
 
             @Override
@@ -41,23 +44,12 @@ public class TabbedActivity extends AppCompatActivity implements ActionBar.TabLi
 
             }
         });
-
-        actionBar=getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        ActionBar.Tab tab1=actionBar.newTab();
-        tab1.setText("Map Tab");
-        tab1.setTabListener(TabbedActivity.this);
-
-        ActionBar.Tab tab2=actionBar.newTab();
-        tab2.setText("List Tab");
-        tab2.setTabListener(TabbedActivity.this);
-
-
-        actionBar.addTab(tab1);
-        actionBar.addTab(tab2);
-
-
+        PagerTitleStrip pagerTitleStrip = (PagerTitleStrip)findViewById(R.id.pagertitlestrip);
+        PagerTabStrip pagerTabStrip=(PagerTabStrip) findViewById(R.id.pagertabstrip);
+        TabLayout tabLayout=(TabLayout) findViewById(R.id.tabl);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -74,6 +66,8 @@ public class TabbedActivity extends AppCompatActivity implements ActionBar.TabLi
     public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
 
     }
+
+
     public class MyAdapter extends FragmentPagerAdapter {
         public MyAdapter(FragmentManager fm) {
             super(fm);
@@ -94,6 +88,17 @@ public class TabbedActivity extends AppCompatActivity implements ActionBar.TabLi
         @Override
         public int getCount() {
             return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            String name="";
+            if(position==0){
+                name="Map Tab";
+            }else if(position==1){
+                name="List Tab";
+            }
+            return name;
         }
     }
 

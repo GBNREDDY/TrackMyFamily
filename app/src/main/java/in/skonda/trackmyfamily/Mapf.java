@@ -80,9 +80,13 @@ public class Mapf extends Fragment implements OnMapReadyCallback, LocationListen
             return;
         }
         Location location = locationManager.getLastKnownLocation(NETWORK_PROVIDER);
+        if (location==null){
+            location=locationManager.getLastKnownLocation(GPS_PROVIDER);
+        }
         LatLng myloc = new LatLng(location.getLatitude(), location.getLongitude());
         mmap.addMarker(new MarkerOptions().position(myloc).title("Marker at My Location with Network Provider"));
         mmap.moveCamera(CameraUpdateFactory.newLatLng(myloc));
+        mmap.moveCamera(CameraUpdateFactory.zoomIn());
         mmap.getMaxZoomLevel();
 
     }
@@ -92,7 +96,6 @@ public class Mapf extends Fragment implements OnMapReadyCallback, LocationListen
 
         LatLng myloc = new LatLng(location.getLatitude(), location.getLongitude());
         mmap.clear();
-        mmap.moveCamera(CameraUpdateFactory.zoomIn());
         mmap.addMarker(new MarkerOptions().position(myloc).title("Marker at My Location with GPS Provider"));
         mmap.moveCamera(CameraUpdateFactory.newLatLng(myloc));
 

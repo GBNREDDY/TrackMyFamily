@@ -15,14 +15,15 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:background="@color/colorAccent">
-    <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:text="\uf0c0"
-        android:background="@drawable/circle"
-        android:id="@+id/add_group"
-        android:layout_marginRight="2dp"
-        android:layout_marginLeft="2dp" />
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="\uf0c0"
+            android:background="@drawable/circle"
+            android:id="@+id/add_group"
+            android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"
+            />
         <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -69,4 +70,5 @@
             </LinearLayout>
         </HorizontalScrollView>
     </LinearLayout>
+
 </RelativeLayout>

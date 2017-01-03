@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -60,12 +61,13 @@ public class MainActivity extends AppCompatActivity {
             finish();
         } else {
             setContentView(R.layout.activity_main);
-
+            TextInputLayout til1 = (TextInputLayout) findViewById(R.id.til1);
+            TextInputLayout til2 = (TextInputLayout) findViewById(R.id.til2);
             tv1 = (TextView) findViewById(R.id.tv1);
-            et1 = (EditText) findViewById(R.id.et1);
+            et1 = til1.getEditText();
 
             tv2 = (TextView) findViewById(R.id.tv2);
-            et2 = (EditText) findViewById(R.id.et2);
+            et2 = til2.getEditText();
 
             tv3 = (TextView) findViewById(R.id.tv3);
             tv4 = (TextView) findViewById(R.id.tv4);
@@ -179,16 +181,16 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    if (grantResults[0] == PackageManager.PERMISSION_DENIED || grantResults[1] == PackageManager.PERMISSION_DENIED){
+                    if (grantResults[0] == PackageManager.PERMISSION_DENIED || grantResults[1] == PackageManager.PERMISSION_DENIED) {
                         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST);
 
                     }
 
-                } else if ( grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED && grantResults[1] == PackageManager.PERMISSION_DENIED) {
+                } else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED && grantResults[1] == PackageManager.PERMISSION_DENIED) {
                     //ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST);
                     finish();
                 }
-            break;
+                break;
         }
     }
 }

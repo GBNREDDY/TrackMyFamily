@@ -4,89 +4,107 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    android:gravity="center"
     tools:context="in.skonda.trackmyfamily.MainActivity">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\uf030"
-            android:gravity="center_horizontal"
-            android:textSize="35sp"
-            android:id="@id/tv1"/>
     <TextView
-        android:layout_width="match_parent"
+        android:id="@id/tv1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="Upload Picture"
-        android:id="@id/tv2"
-        android:textSize="15sp"
-        android:layout_margin="15dp"/>
+        android:text="\uf030"
+        android:textSize="35sp" />
 
-    <FrameLayout
+    <TextView
+        android:id="@id/tv2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/myborder"
-        android:layout_margin="15dp">
-        <EditText
+        android:layout_margin="15dp"
+        android:gravity="center_horizontal"
+        android:text="Upload Picture"
+        android:textSize="15sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/myborder">
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:id="@id/et1"
-            android:backgroundTint="@color/colorAccent"
-            android:maxLength="20"
-            android:paddingStart="30dp"
-            android:paddingLeft="30dp"/>
+            android:id="@+id/til1">
+
+            <EditText
+                android:id="@id/et1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/silver"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:paddingLeft="30dp"
+                android:paddingStart="30dp"
+                android:hint="User Name"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
         <TextView
+            android:id="@id/tv3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@id/tv3"
             android:gravity="center_vertical"
             android:text="\uf007"
-            android:textSize="35sp"/>
-    </FrameLayout>
-    <FrameLayout
+            android:textSize="35sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/myborder"
-        android:layout_margin="15dp">
-        <EditText
+        android:layout_margin="15dp"
+        android:background="@drawable/myborder">
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@id/et2"
-            android:maxLength="10"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:inputType="number"
-            android:backgroundTint="@color/colorAccent"
-            android:paddingStart="30dp"
-            android:paddingLeft="30dp"/>
+            android:id="@+id/til2">
+
+            <EditText
+                android:id="@id/et2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/silver"
+                android:inputType="number"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:paddingLeft="30dp"
+                android:paddingStart="30dp"
+                android:hint="Mobile"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
         <TextView
+            android:id="@id/tv4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@id/tv4"
-            android:gravity="center_vertical"
             android:text="\uf10b"
-            android:textSize="40sp"/>
-    </FrameLayout>
+            android:textSize="40sp" />
+    </RelativeLayout>
+
     <Button
+        android:id="@id/btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="15dp"
-        android:text="REGISTER"
-        android:textSize="20sp"
         android:background="@color/colorPrimary"
-        android:textColor="@color/colorAccent"
-        android:id="@id/btn"
-
-        />
+        android:text="REGISTER"
+        android:textColor="@color/silver"
+        android:textSize="20sp" />
 
 </LinearLayout>
